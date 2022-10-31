@@ -3,9 +3,14 @@
   "description": "download image and video from instagram",
   "author": {
     "name": "TEDIORELEE",
-    "email": "tediorelee@gmail.com"
+    "email": "tediorelee@gmail.com",
+    "url": "https://github.com/tediorelee"
   },
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tediorelee/koishi-plugin-instagram-downloader.git"
+  },
   "version": "1.0.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
