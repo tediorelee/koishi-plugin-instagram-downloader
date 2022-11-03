@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-instagram-image-video-downloader",
-  "description": "download image and video from instagram",
+  "description": "自动识别群聊里的Instagram post链接, 返回视频/图片资源, 需要科学环境",
   "author": {
     "name": "TEDIORELEE",
     "email": "tediorelee@gmail.com",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/tediorelee/koishi-plugin-instagram-downloader.git"
   },
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [

@@ -8,6 +8,10 @@ export const Config: Schema<Config> = Schema.object({})
 
 const apiEndpointPrefix = 'https://api.bhawanigarg.com/social/instagram/?url=';
 
+export const GRAPH_SIDECAR = 'GraphSidecar';
+export const GRAPH_IMAGE = 'GraphImage';
+export const GRAPH_VIDEO = 'GraphVideo';
+
 export function apply(ctx: Context) {
   function fetchImageFromAPI(url: string) {
     return ctx.http.get(apiEndpointPrefix + url);
@@ -24,16 +28,17 @@ export function apply(ctx: Context) {
       if (result.status === 0) return 'Invalid URL or ID!';
       const { graphql: { shortcode_media } } = result;
 
-      if (!shortcode_media.edge_sidecar_to_children) {
-        if (shortcode_media.is_video) {
-          await session.sendQueued(segment.video(shortcode_media.video_url))
-        } else {
-          const img = await ctx.http.get<ArrayBuffer>(shortcode_media.display_resources[0].src, {
-            responseType: 'arraybuffer',
-          })
-          await session.sendQueued(segment.image(img))
-        }
+      // only one image in instagram post
+      if (shortcode_media.__typename === GRAPH_IMAGE) {
+        const img = await ctx.http.get<ArrayBuffer>(shortcode_media.display_resources[0].src, {
+          responseType: 'arraybuffer',
+        })
+        await session.sendQueued(segment.image(img))
+      } else if (shortcode_media.__typename === GRAPH_VIDEO) {
+        // only one video in instagram post
+        await session.sendQueued(segment.video(shortcode_media.video_url))
       } else {
+        // contains both video and images or multiple images or videos
         const { edges } = shortcode_media.edge_sidecar_to_children;
         edges.forEach(async item => {
           if (item.node.is_video) {
